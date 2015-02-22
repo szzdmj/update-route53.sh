@@ -15,7 +15,7 @@ COMMENT="Auto updating @ `date`"
 TYPE="A"
 
 # Get the external IP address
-IP=`curl -ss https://icanhazip.com/`
+IP=`curl -sS https://wtfismyip.com/text`
 
 function valid_ip()
 {
