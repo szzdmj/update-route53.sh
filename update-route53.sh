@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# (optional) You might need to set your PATH variable at the top here
+# depending on how you run this script
+#PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 # Hosted Zone ID e.g. BJBK35SKMM9OE
 ZONEID="enter zone id here"
 
@@ -14,8 +18,8 @@ COMMENT="Auto updating @ `date`"
 # Change to AAAA if using an IPv6 address
 TYPE="A"
 
-# Get the external IP address
-IP=`curl -sS https://wtfismyip.com/text`
+# Get the external IP address from OpenDNS (more reliable than other providers)
+IP=`dig +short myip.opendns.com @resolver1.opendns.com`
 
 function valid_ip()
 {
@@ -34,7 +38,8 @@ function valid_ip()
     return $stat
 }
 
-# Get current dir (stolen from http://stackoverflow.com/a/246128/920350)
+# Get current dir
+# (from http://stackoverflow.com/a/246128/920350)
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LOGFILE="$DIR/update-route53.log"
 IPFILE="$DIR/update-route53.ip"
