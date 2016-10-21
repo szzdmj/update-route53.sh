@@ -20,6 +20,8 @@ TYPE="A"
 
 # Get the external IP address from OpenDNS (more reliable than other providers)
 IP=`dig +short myip.opendns.com @resolver1.opendns.com`
+#Get DNS of recordset for comparison
+AWSIP=`dig +short $RECORDSET @resolver1.opendns.com`
 
 function valid_ip()
 {
@@ -54,8 +56,8 @@ if [ ! -f "$IPFILE" ]
     then
     touch "$IPFILE"
 fi
-
-if grep -Fxq "$IP" "$IPFILE"; then
+#compare local IP to dns of recordset
+if [ "$IP" ==  "$AWSIP" ]; then
     # code if found
     echo "IP is still $IP. Exiting" >> "$LOGFILE"
     exit 0
