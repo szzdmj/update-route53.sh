@@ -20,8 +20,11 @@ TYPE="A"
 
 # Get the external IP address from OpenDNS (more reliable than other providers)
 IP=`dig +short myip.opendns.com @resolver1.opendns.com`
-#Get DNS of recordset for comparison
-AWSIP=`dig +short $RECORDSET @resolver1.opendns.com`
+
+# Get the current ip address listed in AWS of your zone
+# Requires jq to be installed
+AWSIP="$(aws route53 list-resource-record-sets --hosted-zone-id $ZONEID --start-record-name $RECORDSET --start-record-type A --max-items 1 --output json | jq -r \ '.ResourceRecordSets[].ResourceRecords[].Value')"
+
 
 function valid_ip()
 {
@@ -59,7 +62,7 @@ fi
 #compare local IP to dns of recordset
 if [ "$IP" ==  "$AWSIP" ]; then
     # code if found
-    echo "IP is still $IP. Exiting" >> "$LOGFILE"
+    # echo "IP is still $IP. Exiting" >> "$LOGFILE"
     exit 0
 else
     echo "IP has changed to $IP" >> "$LOGFILE"
