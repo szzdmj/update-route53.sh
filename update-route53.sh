@@ -21,7 +21,7 @@ TYPE="A"
 # Get the external IP address from OpenDNS (more reliable than other providers)
 IP=`dig +short myip.opendns.com @resolver1.opendns.com`
 
-# Get the current ip address listed in AWS of your zone
+# Get the current ip address on AWS
 # Requires jq to be installed
 AWSIP="$(aws route53 list-resource-record-sets --hosted-zone-id $ZONEID --start-record-name $RECORDSET --start-record-type A --max-items 1 --output json | jq -r \ '.ResourceRecordSets[].ResourceRecords[].Value')"
 
