@@ -1,22 +1,69 @@
 #!/bin/bash
 
-# (optional) You might need to set your PATH variable at the top here
-# depending on how you run this script
-#PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+usage=$(cat <<"EOF"
+Usage:
+    ./update-route53.sh [--help] --record=<record_set_name>
+                        [--ttl=<ttl_seconds>] [--type=<record_type>]
+                        --zone=<zone_id>
 
-# Hosted Zone ID e.g. BJBK35SKMM9OE
-ZONEID="enter zone id here"
+Update an AWS Route 53 record with your external IP address.
 
-# The CNAME you want to update e.g. hello.example.com
-RECORDSET="enter cname here"
+OPTIONS
+    --help
+        Show this output
 
-# More advanced options below
-# The Time-To-Live of this recordset
-TTL=300
-# Change this if you want
-COMMENT="Auto updating @ `date`"
-# Change to AAAA if using an IPv6 address
+    --record=<record_set_name>
+        The name of the record set to update (e.g., hello.example.com).
+
+    --ttl=<ttl_seconds>
+        The TTL (in seconds) to set on the DNS record. Defaults to 300.
+
+    --type=<record_type>
+        The type of the record set to be updated (e.g., A, AAAA). Defaults to A.
+
+    --zone=<zone_id>
+        The zone id of the domain to be updated (e.g., ABCD12EFGH3IJ).
+EOF
+)
+
+SHOW_HELP=0
+ZONEID=""
+RECORDSET=""
 TYPE="A"
+TTL=300
+COMMENT="Auto updating @ `date`"
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --help)
+            SHOW_HELP=1
+            ;;
+        --record=*)
+            RECORDSET="${1#*=}"
+            ;;
+        --ttl=*)
+            TTL="${1#*=}"
+            ;;
+        --type=*)
+            TYPE="${1#*=}"
+            ;;
+        --zone=*)
+            ZONEID="${1#*=}"
+            ;;
+        *)
+            SHOW_HELP=1
+    esac
+    shift
+done
+
+if [  -z "$RECORDSET" -o -z "$ZONEID" ]; then
+    SHOW_HELP=1
+fi
+
+if [ $SHOW_HELP -eq 1 ]; then
+    echo "$usage"
+    exit 0
+fi
 
 # Get the external IP address from OpenDNS (more reliable than other providers)
 IP=`dig +short myip.opendns.com @resolver1.opendns.com`
@@ -42,7 +89,7 @@ function valid_ip()
 # (from http://stackoverflow.com/a/246128/920350)
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LOGFILE="$DIR/update-route53.log"
-IPFILE="$DIR/update-route53.ip"
+IPFILE="$DIR/update-route53__${ZONEID}__${RECORDSET}__.ip"
 
 if ! valid_ip $IP; then
     echo "Invalid IP address: $IP" >> "$LOGFILE"
