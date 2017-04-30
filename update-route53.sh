@@ -23,12 +23,18 @@ OPTIONS
 
     --zone=<zone_id>
         The zone id of the domain to be updated (e.g., ABCD12EFGH3IJ).
+
+    --profile=<profile_name>
+        The name of the `awscli` profile to use, if any (e.g., testing).
+        (See: https://github.com/aws/aws-cli#getting-started)
 EOF
 )
 
 SHOW_HELP=0
 ZONEID=""
 RECORDSET=""
+PROFILE=""
+PROFILEFLAG=""
 TYPE="A"
 TTL=300
 COMMENT="Auto updating @ `date`"
@@ -50,6 +56,9 @@ while [ $# -gt 0 ]; do
         --zone=*)
             ZONEID="${1#*=}"
             ;;
+        --profile=*)
+            PROFILE="${1#*=}"
+            ;;
         *)
             SHOW_HELP=1
     esac
@@ -65,13 +74,17 @@ if [ $SHOW_HELP -eq 1 ]; then
     exit 0
 fi
 
+if [ -n "$PROFILE" ]; then
+    PROFILEFLAG="--profile $PROFILE"
+fi
+
 # Get the external IP address from OpenDNS (more reliable than other providers)
 IP=`dig +short myip.opendns.com @resolver1.opendns.com`
 
 # Get the current ip address on AWS
 # Requires jq to parse JSON output
 AWSIP="$(
-   aws route53 list-resource-record-sets \
+   aws $PROFILEFLAG route53 list-resource-record-sets \
       --hosted-zone-id "$ZONEID" --start-record-name "$RECORDSET" \
       --start-record-type "$TYPE" --max-items 1 \
       --output json | jq -r \ '.ResourceRecordSets[].ResourceRecords[].Value'
@@ -142,7 +155,7 @@ else
 EOF
 
     # Update the Hosted Zone record
-    aws route53 change-resource-record-sets \
+    aws $PROFILEFLAG route53 change-resource-record-sets \
         --hosted-zone-id $ZONEID \
         --change-batch file://"$TMPFILE" \
         --query '[ChangeInfo.Comment, ChangeInfo.Id, ChangeInfo.Status, ChangeInfo.SubmittedAt]' \
