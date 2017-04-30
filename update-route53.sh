@@ -134,7 +134,9 @@ EOF
     # Update the Hosted Zone record
     aws route53 change-resource-record-sets \
         --hosted-zone-id $ZONEID \
-        --change-batch file://"$TMPFILE" >> "$LOGFILE"
+        --change-batch file://"$TMPFILE" \
+        --query '[ChangeInfo.Comment, ChangeInfo.Id, ChangeInfo.Status, ChangeInfo.SubmittedAt]' \
+        --output text >> "$LOGFILE"
     echo "" >> "$LOGFILE"
 
     # Clean up
