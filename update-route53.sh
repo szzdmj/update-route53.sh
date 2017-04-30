@@ -70,7 +70,12 @@ IP=`dig +short myip.opendns.com @resolver1.opendns.com`
 
 # Get the current ip address on AWS
 # Requires jq to parse JSON output
-AWSIP="$(aws route53 list-resource-record-sets --hosted-zone-id $ZONEID --start-record-name $RECORDSET --start-record-type A --max-items 1 --output json | jq -r \ '.ResourceRecordSets[].ResourceRecords[].Value')"
+AWSIP="$(
+   aws route53 list-resource-record-sets \
+      --hosted-zone-id "$ZONEID" --start-record-name "$RECORDSET" \
+      --start-record-type "$TYPE" --max-items 1 \
+      --output json | jq -r \ '.ResourceRecordSets[].ResourceRecords[].Value'
+)"
 
 
 function valid_ip()
