@@ -1,4 +1,7 @@
-## purpose
+update-route53.sh
+===
+
+## Purpose
 
 To provide dyndns updates to a route53 record programatically 
 
@@ -9,12 +12,13 @@ Install the dependencies:
   * dig
   * jq
   * awscli
-On debian:
+
+On debian:  
     sudo apt-get install sipcalc jq awscli dnsutils
     
-Configure aws:
+Configure aws:  
     aws configure
-or:
+or:  
     aws configure --profile mydnsprofile
 
 configure a cron job or systemd timer to execute update-route53.sh on a regular interval with the params you desire.
