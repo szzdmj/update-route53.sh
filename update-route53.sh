@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 usage=$(cat <<"EOF"
 Usage:
@@ -27,6 +28,9 @@ OPTIONS
     --profile=<profile_name>
         The name of the `awscli` profile to use, if any (e.g., testing).
         (See: https://github.com/aws/aws-cli#getting-started)
+
+    --local=<if>
+        Use the local primary address from if interface.
 EOF
 )
 
@@ -35,6 +39,7 @@ ZONEID=""
 RECORDSET=""
 PROFILE=""
 PROFILEFLAG=""
+LOCAL=""
 TYPE="A"
 TTL=300
 COMMENT="Auto updating @ `date`"
@@ -59,6 +64,9 @@ while [ $# -gt 0 ]; do
         --profile=*)
             PROFILE="${1#*=}"
             ;;
+        --local=*)
+            LOCAL="${1#*=}"
+            ;;	
         *)
             SHOW_HELP=1
     esac
@@ -78,8 +86,28 @@ if [ -n "$PROFILE" ]; then
     PROFILEFLAG="--profile $PROFILE"
 fi
 
+if [ "$TYPE" == "A" ]; then
+    if [ -n "$LOCAL" ]; then
+	IP=$(ifconfig eth1 | awk '$1=="inet"{print $2}' | head -n1)
+    else
+	IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
+    fi
+else
+    # AAAA - ipv6
+    if [ -n "$LOCAL" ]; then
+	IP=$(ifconfig eth1 | \
+		    awk '$1=="inet6"{print $2}' | \
+		    awk -F: '$1~/[fF][eE]80/{print $0}' | \
+		    head -n1)
+    else
+	IP=$(dig +short -6 myip.opendns.com aaaa @resolver1.ipv6-sandbox.opendns.com)
+    fi
+fi
+
+		
+
 # Get the external IP address from OpenDNS (more reliable than other providers)
-IP=`dig +short myip.opendns.com @resolver1.opendns.com`
+
 
 # Get the current ip address on AWS
 # Requires jq to parse JSON output
@@ -91,39 +119,17 @@ AWSIP="$(
 )"
 
 
-function valid_ip()
-{
-    local  ip=$1
-    local  stat=1
-
-    if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-        OIFS=$IFS
-        IFS='.'
-        ip=($ip)
-        IFS=$OIFS
-        [[ ${ip[0]} -le 255 && ${ip[1]} -le 255 \
-            && ${ip[2]} -le 255 && ${ip[3]} -le 255 ]]
-        stat=$?
-    fi
-    return $stat
-}
-
 # Get current dir
 # (from http://stackoverflow.com/a/246128/920350)
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LOGFILE="$DIR/update-route53.log"
-IPFILE="$DIR/update-route53__${ZONEID}__${RECORDSET}__.ip"
 
-if ! valid_ip $IP; then
+# Requires sipcalc to check ip is valid
+if sipcalc "$IP" | grep -q ERR; then
     echo "Invalid IP address: $IP" >> "$LOGFILE"
     exit 1
 fi
 
-# Check if the IP has changed
-if [ ! -f "$IPFILE" ]
-    then
-    touch "$IPFILE"
-fi
 #compare local IP to dns of recordset
 if [ "$IP" ==  "$AWSIP" ]; then
     # code if found
@@ -166,5 +172,3 @@ EOF
     rm $TMPFILE
 fi
 
-# All Done - cache the IP address for next time
-echo "$IP" > "$IPFILE"
