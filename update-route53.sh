@@ -28,9 +28,11 @@ OPTIONS
     --profile=<profile_name>
         The name of the `awscli` profile to use, if any (e.g., testing).
         (See: https://github.com/aws/aws-cli#getting-started)
+	e.x.: aws configure --profile <profile_name>
 
     --local=<if>
-        Use the local primary address from if interface.
+        Use the first local ip address from the if interface.
+	For IPv6, use the SLAAC address.
 EOF
 )
 
@@ -88,26 +90,26 @@ fi
 
 if [ "$TYPE" == "A" ]; then
     if [ -n "$LOCAL" ]; then
+	# this is probably not portable
 	IP=$(ifconfig eth1 | awk '$1=="inet"{print $2}' | head -n1)
     else
+	# Get the external IP address from OpenDNS
+	# (more reliable than other providers)	
 	IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
     fi
 else
     # AAAA - ipv6
     if [ -n "$LOCAL" ]; then
+	# this is probably not portable
 	IP=$(ifconfig eth1 | \
 		    awk '$1=="inet6"{print $2}' | \
 		    awk -F: '$1~/[fF][eE]80/{print $0}' | \
 		    head -n1)
     else
+	# Get the IPv6 address from OpenDNS
 	IP=$(dig +short -6 myip.opendns.com aaaa @resolver1.ipv6-sandbox.opendns.com)
     fi
 fi
-
-		
-
-# Get the external IP address from OpenDNS (more reliable than other providers)
-
 
 # Get the current ip address on AWS
 # Requires jq to parse JSON output
