@@ -13,12 +13,16 @@ Install the dependencies:
   * jq
   * awscli
 
-On debian:  
+On debian:
+
     sudo apt-get install sipcalc jq awscli dnsutils
     
-Configure aws:  
+Configure aws:
+
     aws configure
-or:  
+    
+or:
+
     aws configure --profile mydnsprofile
 
 configure a cron job or systemd timer to execute update-route53.sh on a regular interval with the params you desire.
