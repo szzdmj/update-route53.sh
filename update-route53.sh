@@ -164,7 +164,7 @@ else
 EOF
 
     # Update the Hosted Zone record
-    aws $PROFILEFLAG route53 change-resource-record-sets \
+    pipenv run aws $PROFILEFLAG route53 change-resource-record-sets \
         --hosted-zone-id $ZONEID \
         --change-batch file://"$TMPFILE" \
         --query '[ChangeInfo.Comment, ChangeInfo.Id, ChangeInfo.Status, ChangeInfo.SubmittedAt]' \
