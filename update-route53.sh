@@ -141,6 +141,7 @@ else
     echo "IP has changed to $IP" >> "$LOGFILE"
     # Fill a temp file with valid JSON
     TMPFILE=$(mktemp /tmp/temporary-file.XXXXXXXX)
+    trap "rm $TMPFILE;" exit
     cat > ${TMPFILE} << EOF
     {
       "Comment":"$COMMENT",
@@ -169,8 +170,5 @@ EOF
         --query '[ChangeInfo.Comment, ChangeInfo.Id, ChangeInfo.Status, ChangeInfo.SubmittedAt]' \
         --output text >> "$LOGFILE"
     echo "" >> "$LOGFILE"
-
-    # Clean up
-    rm $TMPFILE
 fi
 
