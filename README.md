@@ -11,18 +11,27 @@ Install the dependencies:
   * sipcalc
   * dig
   * jq
-  * awscli
+  * pipenv
 
 On debian:
 
-    sudo apt-get install sipcalc jq awscli dnsutils
-    
+```shell
+sudo apt-get install sipcalc jq dnsutils
+python3 -m pip install pipenv --user
+pipenv sync
+```    
+
+
 Configure aws:
 
-    aws configure
-    
+```shell
+pipenv run aws configure
+```
+
 or:
 
-    aws configure --profile mydnsprofile
+```shell
+    pipenv run aws configure --profile mydnsprofile
+```
 
 configure a cron job or systemd timer to execute update-route53.sh on a regular interval with the params you desire.
