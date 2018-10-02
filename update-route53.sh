@@ -114,7 +114,7 @@ fi
 # Get the current ip address on AWS
 # Requires jq to parse JSON output
 AWSIP="$(
-   aws $PROFILEFLAG route53 list-resource-record-sets \
+   pipenv run aws $PROFILEFLAG route53 list-resource-record-sets \
       --hosted-zone-id "$ZONEID" --start-record-name "$RECORDSET" \
       --start-record-type "$TYPE" --max-items 1 \
       --output json | jq -r \ '.ResourceRecordSets[].ResourceRecords[].Value'
