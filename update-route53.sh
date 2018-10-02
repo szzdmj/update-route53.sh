@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# get to the DIR with the Pipfile
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $DIR
+
 usage=$(cat <<"EOF"
 Usage:
     ./update-route53.sh [--help] --record=<record_set_name>
