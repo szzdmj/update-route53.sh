@@ -95,7 +95,7 @@ fi
 if [ "$TYPE" == "A" ]; then
     if [ -n "$LOCAL" ]; then
 	# this is probably not portable
-	IP=$(ifconfig eth1 | awk '$1=="inet"{print $2}' | head -n1)
+	IP=$(ifconfig $LOCAL | awk '$1=="inet"{print $2}' | head -n1)
     else
 	# Get the external IP address from OpenDNS
 	# (more reliable than other providers)	
@@ -105,7 +105,7 @@ else
     # AAAA - ipv6
     if [ -n "$LOCAL" ]; then
 	# this is probably not portable
-	IP=$(ifconfig eth1 | \
+	IP=$(ifconfig $LOCAL | \
 		    awk '$1=="inet6"{print $2}' | \
 		    awk -F: '$1~/[fF][eE]80/{print $0}' | \
 		    head -n1)
