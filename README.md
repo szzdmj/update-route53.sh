@@ -11,12 +11,13 @@ Install the dependencies:
   * sipcalc
   * dig
   * jq
+  * ifconfig
   * pipenv
 
 On debian:
 
 ```shell
-sudo apt-get install sipcalc jq dnsutils
+sudo apt-get install sipcalc jq dnsutils net-tools
 python3 -m pip install pipenv --user
 pipenv sync
 ```    
