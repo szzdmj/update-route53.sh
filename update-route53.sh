@@ -2,7 +2,8 @@
 set -e
 
 # get to the DIR with the Pipfile
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SOURCE_DIR="$( dirname "${BASH_SOURCE}" )"
+DIR="$( cd "$SOURCE_DIR"  && pwd )"
 cd $DIR
 
 usage=$(cat <<"EOF"
@@ -92,7 +93,7 @@ if [ -n "$PROFILE" ]; then
     PROFILEFLAG="--profile $PROFILE"
 fi
 
-if [ "$TYPE" == "A" ]; then
+if [ "x$TYPE" = "xA" ]; then
     if [ -n "$LOCAL" ]; then
 	# this is probably not portable
 	IP=$(ifconfig $LOCAL | awk '$1=="inet"{print $2}' | head -n1)
@@ -127,7 +128,8 @@ AWSIP="$(
 
 # Get current dir
 # (from http://stackoverflow.com/a/246128/920350)
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SOURCE_DIR="$( dirname "${BASH_SOURCE}" )"
+DIR="$( cd "$SOURCE_DIR"  && pwd )"
 LOGFILE="$DIR/update-route53.log"
 
 # Requires sipcalc to check ip is valid
@@ -137,7 +139,7 @@ if sipcalc "$IP" | grep -q ERR; then
 fi
 
 #compare local IP to dns of recordset
-if [ "$IP" ==  "$AWSIP" ]; then
+if [ "$IP" =  "$AWSIP" ]; then
     # code if found
     # echo "IP is still $IP. Exiting" >> "$LOGFILE"
     exit 0
