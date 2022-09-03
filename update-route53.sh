@@ -100,7 +100,7 @@ if [ "x$TYPE" = "xA" ]; then
     else
 	# Get the external IP address from OpenDNS
 	# (more reliable than other providers)	
-	IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
+	IP=$(dig -4 +short myip.opendns.com @resolver1.opendns.com)
     fi
 else
     # AAAA - ipv6
