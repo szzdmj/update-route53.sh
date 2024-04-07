@@ -16,12 +16,27 @@ Install the dependencies:
 
 On debian:
 
+install required system packages:
+
 ```shell
 sudo apt-get install sipcalc jq dnsutils net-tools
+``
+
+install required python packages using pipenv:
+
+```shell
 python3 -m pip install pipenv --user
 pipenv sync
 ```    
 
+install required python packages using venv:
+
+```shell
+sudo apt-get install sipcalc jq dnsutils net-tools
+python3 -m venv ./.venv/
+. ./.venv/bin/activate
+pip install -r ./requirements.txt 
+```   
 
 Configure aws:
 

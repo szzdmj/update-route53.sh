@@ -116,10 +116,19 @@ else
     fi
 fi
 
+# see if we are using a virtual environment or pipenv
+awsVenvPath=./.venv/bin/aws
+if [ -f "$awsVenvPath" ] ; then
+    awsPath="$awsVenvPath"
+else
+    awsPath="pipenv run aws"
+fi
+
+
 # Get the current ip address on AWS
 # Requires jq to parse JSON output
 AWSIP="$(
-   pipenv run aws $PROFILEFLAG route53 list-resource-record-sets \
+   ${awsPath} $PROFILEFLAG route53 list-resource-record-sets \
       --hosted-zone-id "$ZONEID" --start-record-name "$RECORDSET" \
       --start-record-type "$TYPE" --max-items 1 \
       --output json | jq -r \ '.ResourceRecordSets[].ResourceRecords[].Value'
@@ -170,7 +179,7 @@ else
 EOF
 
     # Update the Hosted Zone record
-    pipenv run aws $PROFILEFLAG route53 change-resource-record-sets \
+    ${awsPath} $PROFILEFLAG route53 change-resource-record-sets \
         --hosted-zone-id $ZONEID \
         --change-batch file://"$TMPFILE" \
         --query '[ChangeInfo.Comment, ChangeInfo.Id, ChangeInfo.Status, ChangeInfo.SubmittedAt]' \
