@@ -18,19 +18,19 @@
     "default": {
         "awscli": {
             "hashes": [
-                "sha256:2f28d4b9da41310fc7627b78c788c485d7093bc1c5be6df4f95eac27add7d09f",
-                "sha256:dc0ff30217b0cddb2caced5178f64c513683d13add239e1153d5baaa19371bab"
+                "sha256:2b0c5cdb25a1d3b56921777596473af2b1314f0059ea451eccb0c3ef72b602b9",
+                "sha256:4d4841058fe87cc70b8deb27b261cf64337be05d36f45c2abb5078ba8a1e07ef"
             ],
             "index": "pypi",
-            "version": "==1.25.67"
+            "version": "==1.28.1"
         },
         "botocore": {
             "hashes": [
-                "sha256:6293d1cb392a4779cf0a44055cae9ac0728809c14a11f2d91e679a00a9beae20",
-                "sha256:6c8c8c82b38ba2353bd3bc071019ab44d8a160b9d17f3ab166f0ceaf1ca38c12"
+                "sha256:18a32a21bfa9b418b9a38ea5ef4464eba003cbb26fca2cd56e4f51098c5d1a0f",
+                "sha256:4d1ac5a796c5c5c87946f25f3d98764288a0ed848e772a7a47cd134847e885e7"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==1.27.66"
+            "version": "==1.30.1"
         },
         "colorama": {
             "hashes": [
@@ -58,21 +58,11 @@
         },
         "pyasn1": {
             "hashes": [
-                "sha256:014c0e9976956a08139dc0712ae195324a75e142284d5f87f1a87ee1b068a359",
-                "sha256:03840c999ba71680a131cfaee6fab142e1ed9bbd9c693e285cc6aca0d555e576",
-                "sha256:0458773cfe65b153891ac249bcf1b5f8f320b7c2ce462151f8fa74de8934becf",
-                "sha256:08c3c53b75eaa48d71cf8c710312316392ed40899cb34710d092e96745a358b7",
-                "sha256:39c7e2ec30515947ff4e87fb6f456dfc6e84857d34be479c9d4a4ba4bf46aa5d",
-                "sha256:5c9414dcfede6e441f7e8f81b43b34e834731003427e5b09e4e00e3172a10f00",
-                "sha256:6e7545f1a61025a4e58bb336952c5061697da694db1cae97b116e9c46abcf7c8",
-                "sha256:78fa6da68ed2727915c4767bb386ab32cdba863caa7dbe473eaae45f9959da86",
-                "sha256:7ab8a544af125fb704feadb008c99a88805126fb525280b2270bb25cc1d78a12",
-                "sha256:99fcc3c8d804d1bc6d9a099921e39d827026409a58f2a720dcdb89374ea0c776",
-                "sha256:aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba",
-                "sha256:e89bf84b5437b532b0803ba5c9a5e054d21fec423a89952a74f87fa2c9b7bce2",
-                "sha256:fec3e9d8e36808a28efb59b489e4528c10ad0f480e57dcc32b4de5c9d8c9fdf3"
+                "sha256:87a2121042a1ac9358cabcaf1d07680ff97ee6404333bacca15f76aa8ad01a57",
+                "sha256:97b7290ca68e62a832558ec3976f15cbf911bf5d7c7039d8b861c2a0ece69fde"
             ],
-            "version": "==0.4.8"
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
+            "version": "==0.5.0"
         },
         "python-dateutil": {
             "hashes": [
@@ -127,11 +117,11 @@
         },
         "s3transfer": {
             "hashes": [
-                "sha256:06176b74f3a15f61f1b4f25a1fc29a4429040b7647133a463da8fa5bd28d5ecd",
-                "sha256:2ed07d3866f523cc561bf4a00fc5535827981b117dd7876f036b0c1aca42c947"
+                "sha256:3c0da2d074bf35d6870ef157158641178a4204a6e689e82546083e31e0311346",
+                "sha256:640bb492711f4c0c0905e1f62b6aaeb771881935ad27884852411f8e9cacbca9"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==0.6.0"
+            "version": "==0.6.1"
         },
         "six": {
             "hashes": [
@@ -143,11 +133,11 @@
         },
         "urllib3": {
             "hashes": [
-                "sha256:3fa96cf423e6987997fc326ae8df396db2a8b7c667747d47ddd8ecba91f4a74e",
-                "sha256:b930dd878d5a8afb066a637fbb35144fe7901e3b209d1cd4f524bd0e9deee997"
+                "sha256:8d36afa7616d8ab714608411b4a3b13e58f463aee519024578e062e141dce20f",
+                "sha256:8f135f6502756bde6b2a9b28989df5fbe87c9970cecaa69041edcce7f0589b14"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_version < '4'",
-            "version": "==1.26.12"
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
+            "version": "==1.26.16"
         }
     },
     "develop": {}
