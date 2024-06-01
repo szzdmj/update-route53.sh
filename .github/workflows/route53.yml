@@ -3,7 +3,7 @@ name: Share data between fping jobs
 on: [push]
 
 jobs:
-job:
+ job:
     name: Display results
     runs-on: ubuntu-latest
     steps:
