@@ -1,0 +1,26 @@
+name: Share data between fping jobs
+
+on: [push]
+
+jobs:
+job:
+    name: Display results
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download result for job 1
+        uses: actions/download-artifact@v4
+        with:
+          name: homework_pre
+      - name: Print the final result
+        shell: bash
+        run: |
+          value=`cat 1.txt`
+          echo The result is $value
+          array=()
+          while read line; do
+          array+=("$line")
+          done < 1.txt
+          echo ${#array[@]} #Number of elements in the array
+          value=`cat list2.txt`
+          echo The ipv4 list is $value
+          sudo apt-get install sipcalc jq dnsutils net-tools
