@@ -12,7 +12,7 @@ jobs:
         run: |
           sudo apt-get install sipcalc jq dnsutils net-tools
           python3 -m pip install pipenv --user
-
+          pipenv sync
       - name: Download result for job 1
         uses: actions/download-artifact@v4
         with:
