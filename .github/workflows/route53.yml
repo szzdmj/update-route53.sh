@@ -14,6 +14,7 @@ jobs:
           python3 -m pip install pipenv --user
           python3 -m pip install awscli
           pipenv run aws configure
+            ./add-record53.sh --type=CNAME --record=sonarr.beyerautomation.com --value=www.beyerautomation.com --zone=Z2ZDO4FIWQ98BH --profile=dyndns
       - name: Download result for job 1
         uses: actions/download-artifact@v4
         with:
